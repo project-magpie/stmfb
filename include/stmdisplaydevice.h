@@ -103,16 +103,9 @@ static inline struct stm_display_output_s *stm_display_get_output(stm_display_de
  * struct stm_display_plane_s *stm_display_get_plane(stm_display_device_t *d,
  *                                                   ULONG planeID)
  *
- * Get a plane instance for the given plane identifier (OUTPUT_GDP1,
- * OUTPUT_VID1, OUTPUT_VIRT1, etc.)
- *
- * Planes can be enumerated by increasing the planeID until the function
- * returns NULL. To find the intended plane, enumerate them and use
- * stm_display_plane_get_capabilities() until the right one is found.
- *
- * Returns: NULL if the device lock cannot be obtained or the plane
- * identifier does not exist on the given device.
- *
+ * Returns NULL if the device lock cannot be obtained or the plane identifier
+ * does not exist on the given device.
+ * 
  */
 static inline struct stm_display_plane_s *stm_display_get_plane(stm_display_device_t *d, ULONG planeID)
 {

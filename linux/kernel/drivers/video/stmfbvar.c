@@ -290,7 +290,7 @@ stmfb_verify_planeinfo (const struct stmfb_info        *i,
     /* FIXME: or should we just clamp here? */
     return -EINVAL;
 #else
-#  warning check rescale factors here
+/*    warning check rescale factors here */
 #endif
 
   /* check that the surface format is actually supported by the hardware. */

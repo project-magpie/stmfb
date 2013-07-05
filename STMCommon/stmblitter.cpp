@@ -392,7 +392,7 @@ bool CSTmBlitter::SetBufferType(const stm_blitter_surface_t &Surf, ULONG* pReg)
       break;
 
 #ifdef __TDT__	
-     case SURF_BGR888:  
+    case SURF_BGR888:  
       DEBUGF2(3, ("SetBufferType - BLIT_COLOR_FORM_RGB888 big endian\n"));  
       *pReg |= BLIT_COLOR_FORM_RGB888 | BLIT_TY_BIG_ENDIAN;  
       break; 

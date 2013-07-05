@@ -108,7 +108,7 @@ struct stmcore_display_pipeline_data
   int                       hdmi_output_id;
   int                       dvo_output_id;
 #ifdef __TDT__
-#warning Do we still need aux_output_id? It does not seem to be used in stmfb-3.1_stm23_0032 either.
+/* #warning Do we still need aux_output_id? It does not seem to be used in stmfb-3.1_stm23_0032 either. */
   int			    aux_output_id;
 #endif
 

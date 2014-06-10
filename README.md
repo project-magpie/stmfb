@@ -15,14 +15,14 @@ To enable a framebuffer on an available display pipeline a module parameter
 describing the default configuration must be provided. For instance, on the
 STx7100:
 
-modprobe stmfb display0=1280x720-24@60:10M:0:NTSC:YUV:YUV
+    modprobe stmfb display0=1280x720-24@60:10M:0:NTSC:YUV:YUV
 
 Initialises a framebuffer on the main (HD) display pipeline, but not on the
 aux (SD) pipeline.
 
-modprobe stmfb display0=1280x720-24@60:10M:0:NTSC:YUV:YUV \
-               display1=720x576-16@50i:3M:0:PAL:CVBS
-                    
+    modprobe stmfb display0=1280x720-24@60:10M:0:NTSC:YUV:YUV \
+                   display1=720x576-16@50i:3M:0:PAL:CVBS
+
 Initialises two framebuffers, one on each available display pipeline.
 
 Once loaded, fbset can be used to change the framebuffer display mode, within
@@ -39,7 +39,7 @@ cat /proc/fb
 Display pipeline capabilities
 =============================
 
-Each display pipeline on a chip has different capabilities and there are 
+Each display pipeline on a chip has different capabilities and there are
 circumstances where they share resources, restricting the possible use cases.
 
          |   7100/7109   |   7200Cut2    | 7111/7141/7105 |    5202    |
@@ -62,23 +62,23 @@ is required. Although in practice the second item, specifying the amount of
 memory to reserve for this framebuffer, will almost always be present. The
 full parameter string is as follows:
 
-paramstring := <mode>:<memsize>:<auxmemsize>:<sdmode>:<analoguecolour>:<hdmicolour>:<bdispapiversion>
+    paramstring := <mode>:<memsize>:<auxmemsize>:<sdmode>:<analoguecolour>:<hdmicolour>:<bdispapiversion>
 
-mode := <xres>x<yres>[-<bpp>][@<refresh>][i]
+    mode := <xres>x<yres>[-<bpp>][@<refresh>][i]
 
-memsize := <num>[M|K]
+    memsize := <num>[M|K]
 
-auxmemsize := <num>[M][K]
+    uxmemsize := <num>[M][K]
 
-sdmode := N[TSC-M] | n[tsc-m] | NTSC-J | NTSC-443 |
-          P[AL] | p[al] | PAL-M | PAL-N | PAL-Nc |
-          S[ECAM] | s[ecam]
-          
-analoguecolour := R[GB] | r[gb] | Y[UV] | y[uv] | C[VBS] | c[vbs]
+    sdmode := N[TSC-M] | n[tsc-m] | NTSC-J | NTSC-443 |
+              P[AL] | p[al] | PAL-M | PAL-N | PAL-Nc |
+              S[ECAM] | s[ecam]
 
-hdmicolour := R[GB] | r[gb] | Y[UV] | y[uv]
+    analoguecolour := R[GB] | r[gb] | Y[UV] | y[uv] | C[VBS] | c[vbs]
 
-bdispapiversion := 0 | 1
+    hdmicolour := R[GB] | r[gb] | Y[UV] | y[uv]
+
+    bdispapiversion := 0 | 1
 
 If <sdmode>,<analoguecolour> and <hdmicolour> are not specified their default
 values are "NTSC","RGB" and "RGB" respectively. If the <memsize> specified
@@ -94,7 +94,7 @@ after the framebuffer module has been loaded using the fbset command.
 Framebuffer Memory
 ==================
 
-The framebuffer allocates memory from a BPA2 partition named 'bigphysarea', 
+The framebuffer allocates memory from a BPA2 partition named 'bigphysarea',
 which is used for backwards compatibility with the deprecated BPA (bigphysarea)
 memory allocator. This is necessary as the display hardware requires buffers
 that are single physically contiguous areas of memory; hence we cannot use
@@ -105,14 +105,14 @@ defined either in your kernel's board setup or on the command line, for the
 framebuffer allocation.
 
 How much memory should you configure for a framebuffer? For just a framebuffer
-that is a simple calculation of the maximum resolution to be used multiplied 
+that is a simple calculation of the maximum resolution to be used multiplied
 by the colour depth required. For example:
 
 PAL  : 16bit colour = 720*576*2   = 829940 bytes
 1080i: 32bit colour = 1920x1080*4 = 8299400 bytes (nearly 8Mbytes!)
 
-However it gets a bit more complicated if you want to take advantage of 
-DirectFB double or tripple buffering and hardware accelerated graphics. DirectFB 
+However it gets a bit more complicated if you want to take advantage of
+DirectFB double or tripple buffering and hardware accelerated graphics. DirectFB
 takes all of the memory assigned to the framebuffer and uses any not required
 for the primary surface as its offscreen surface cache. Hardware accelerated
 drawing can only use surfaces (either source or destination) that have been
@@ -121,12 +121,12 @@ allocated from this cache, or the primary surface. So let us take an example:
  - a 1920x1080 tripple buffered primary surface
  - 8Mb of cached decoded JPEGs which contain pre-rendered graphics used
    compose the final display of the application.
-   
-That is going to require ~ 8*3 + 8 = 32Mb of framebuffer memory. This is 
+
+That is going to require ~ 8*3 + 8 = 32Mb of framebuffer memory. This is
 approximate because surface alignment and stride restrictions may increase this.
 
 To help manage memory partitioning of a system, DirectFB is able to use
-'auxiliary memory' for its offscreen surfaces. So, for example, the cached 
+'auxiliary memory' for its offscreen surfaces. So, for example, the cached
 decoded JPEGs from above could be placed into the second LMI on SoCs that
 support more than one memory interface. This can reduce the memory requirements
 of the main framebuffer memory to 24MB in the above example. This partitioning
@@ -135,7 +135,7 @@ typically where the 'bigphysarea' partition is located.
 
 To make use of this feature, the module options to stmfb.ko should contain a
 non-zero value for the <auxmemsize> field and your kernel configuration has to
-specify a sufficiently big enough BPA2 partition named 'gfx-memory' to 
+specify a sufficiently big enough BPA2 partition named 'gfx-memory' to
 allocate it from. However, to be able to cope with hardware restrictions we have
 to make sure memory allocated from the 'gfx-memory' partition does not cross a
 64MB address boundary. So while this single partition may be useful in many
@@ -160,20 +160,20 @@ This parameter does not set the default display mode, that is done using <mode>.
 
 Example1: a platform for the Japanese market may set <sdmode> to NTSC-J. When
           the display mode is changed to 720x480@59i then the encoding used for
-          CVBS output and the levels for YPrPb will match the NTSC-J standard. 
+          CVBS output and the levels for YPrPb will match the NTSC-J standard.
           If this platform also supports multi-standard output, then changing
           the display mode to 720x576@50i will default to PAL.
-          
+
 Example2: a platform for the French market may set <sdmode> to SECAM. When
           the display mode is changed to 720x576@50i then the encoding used for
-          CVBS output and the levels for YPrPb will match the SECAM standard. 
+          CVBS output and the levels for YPrPb will match the SECAM standard.
           If this platform also supports multi-standard output, then changing
           the display mode to 720x480@59i will default to NTSC-M.
 
 While in many cases the system's output standards can be statically specified
 like this, it is also possible for an application to change the SD encoding
 standard dynamically. The recommended way of doing this is to use the
-IDirectFBScreen::SetEncoderConfiguration() interface in DirectFB. However 
+IDirectFBScreen::SetEncoderConfiguration() interface in DirectFB. However
 non-DirectFB applications could use the provided framebuffer device IOCTL
 STMFBIO_SET_OUTPUT_CONFIG.
 
@@ -199,7 +199,7 @@ display2 |       N/A         |        N/A        |
 * for VESA VGA or HD/ED modes with sync on green only
 
 If YUV or RGB is specified and the device supports simultaneous CVBS in SD
-modes then CVBS will be enabled by default as well. The CVBS option also 
+modes then CVBS will be enabled by default as well. The CVBS option also
 enables Y/C (S-Video) outputs. This is intended to provide a useful starting
 point, but the settings can be changed after the module is loaded using
 the "stfbset" application (see Runtime Configuration section below) or using
@@ -292,37 +292,37 @@ of the above functionality. The IOCTLs are defined in the header file
 stlinux23-sh4-stmfb-headers RPM. If you have an application that needs to
 access these directly, then inspecting the stfbset source code (see
 linux/tests/stfbset in this source tree) would be a good guide.
- 
+
 Notes:
-(*) the flicker filter is only available in RGB (Truecolor) display modes, it
-    is always disabled if the framebuffer is set to 8bpp.
+    (*) the flicker filter is only available in RGB (Truecolor) display modes, it
+        is always disabled if the framebuffer is set to 8bpp.
 
-(**) if you are using DirectFB or some other graphics package to generate a
-     user interface with per pixel alpha (e.g. 32bit ARGB) then you have to be
-     carefull about what you generate. In the case of DirectFB you are almost
-     certainly going to end up with graphics in a pre-multiplied alpha form.
-     That is, you actually have (A, R*A, G*A, B*A) and you will have set up 
-     the graphics plane so it is blended with, for instance, video below it on
-     this basis.
+    (**) if you are using DirectFB or some other graphics package to generate a
+         user interface with per pixel alpha (e.g. 32bit ARGB) then you have to be
+         carefull about what you generate. In the case of DirectFB you are almost
+         certainly going to end up with graphics in a pre-multiplied alpha form.
+         That is, you actually have (A, R*A, G*A, B*A) and you will have set up
+         the graphics plane so it is blended with, for instance, video below it on
+         this basis.
 
-     In this mode you must NOT use the graphics plane's rescaling to ensure 
-     the pixel values are in the sRGB range for TV applications i.e. 16-235.
-     Lets take a totally transparent pixel, by definition this _must_ have the
-     value (A=0,Ra=0,Ga=0,Ba=0). If rescaling is switched on, this will become
-     (A=0,Ra=16,Ga=16,Ba=16) and this is NOT a VALID alpha pre-multiplied pixel.
-     What happens when this is blended, say with video below, is that the pixels
-     get "lighter" as the invalid RGB values get added to the colour of the
-     video pixels; the totally transparent RGB pixel should have had no effect.
+         In this mode you must NOT use the graphics plane's rescaling to ensure
+         the pixel values are in the sRGB range for TV applications i.e. 16-235.
+         Lets take a totally transparent pixel, by definition this _must_ have the
+         value (A=0,Ra=0,Ga=0,Ba=0). If rescaling is switched on, this will become
+         (A=0,Ra=16,Ga=16,Ba=16) and this is NOT a VALID alpha pre-multiplied pixel.
+         What happens when this is blended, say with video below, is that the pixels
+         get "lighter" as the invalid RGB values get added to the colour of the
+         video pixels; the totally transparent RGB pixel should have had no effect.
 
-     If you are producing a purely graphics system, that does not use per pixel
-     transparency, then the rescale can be used. You may want to make your
-     graphics drawing code easier, or portable between PC and CE/TV worlds,
-     by working in the full RGB range. This may also be useful when implementing
-     a standard web browser (e.g. Webkit) for use in a TV application or for
-     JPEG photo slideshows. The rescale will then compress the RGB so the
-     shadows and highlights are not clipped by the final output or display
-     device.
-     
-     But in a mixed graphics and video environment, you should author your
-     graphics specifically for use on CE displays and not enable the rescale.
+         If you are producing a purely graphics system, that does not use per pixel
+         transparency, then the rescale can be used. You may want to make your
+         graphics drawing code easier, or portable between PC and CE/TV worlds,
+         by working in the full RGB range. This may also be useful when implementing
+         a standard web browser (e.g. Webkit) for use in a TV application or for
+         JPEG photo slideshows. The rescale will then compress the RGB so the
+         shadows and highlights are not clipped by the final output or display
+         device.
+
+         But in a mixed graphics and video environment, you should author your
+         graphics specifically for use on CE displays and not enable the rescale.
 

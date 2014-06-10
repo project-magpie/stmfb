@@ -42,13 +42,13 @@ Display pipeline capabilities
 Each display pipeline on a chip has different capabilities and there are
 circumstances where they share resources, restricting the possible use cases.
 
-         |   7100/7109   |   7200Cut2    | 7111/7141/7105 |    5202    |
-         |---------------|---------------|----------------|------------|
-display0 | VGA/HD/ED/SD* | VGA/HD/ED/SD* | VGA/HD/ED/SD*  | VGA/ED/SD* |
-display1 | SD*           | SD*           | SD*            | SD*        |
-display2 |   N/A         | SD            |      N/A       | N/A        |
+             |   7100/7109   |   7200Cut2    | 7111/7141/7105 |    5202    |
+             |---------------|---------------|----------------|------------|
+    display0 | VGA/HD/ED/SD* | VGA/HD/ED/SD* | VGA/HD/ED/SD*  | VGA/ED/SD* |
+    display1 | SD*           | SD*           | SD*            | SD*        |
+    display2 |   N/A         | SD            |      N/A       | N/A        |
 
-* SD modes cannot be started simultaneously on display0 and display1
+    * SD modes cannot be started simultaneously on display0 and display1
 
 
 Parameter Strings
@@ -184,19 +184,19 @@ The effect of this parameter is partially dependent on the cababilities of a
 display pipeline, the chip and what mode is active. The following are the
 available settings.
 
-         |   7100/7109       |     7200Cut2      |
-         |-------------------|-------------------|
-display0 |    YUV/RGB/CVBS   | YUV/RGB/CVBS      |
-display1 |      CVBS         | YUV/RGB/CVBS      |
-display2 |       N/A         | YUV/CVBS          |
-         |---------------------------------------|
-         |  7111/7141/7105   |        5202       |
-         |-------------------|-------------------|
-display0 | YUV/RGB/CVBS      |     YUV/RGB/CVBS  |
-display1 | YUV/RGB/CVBS      |       CVBS        |
-display2 |       N/A         |        N/A        |
+             |   7100/7109       |     7200Cut2      |
+             |-------------------|-------------------|
+    display0 |    YUV/RGB/CVBS   | YUV/RGB/CVBS      |
+    display1 |      CVBS         | YUV/RGB/CVBS      |
+    display2 |       N/A         | YUV/CVBS          |
+             |---------------------------------------|
+             |  7111/7141/7105   |        5202       |
+             |-------------------|-------------------|
+    display0 | YUV/RGB/CVBS      |     YUV/RGB/CVBS  |
+    display1 | YUV/RGB/CVBS      |       CVBS        |
+    display2 |       N/A         |        N/A        |
 
-* for VESA VGA or HD/ED modes with sync on green only
+    * for VESA VGA or HD/ED modes with sync on green only
 
 If YUV or RGB is specified and the device supports simultaneous CVBS in SD
 modes then CVBS will be enabled by default as well. The CVBS option also
@@ -294,6 +294,7 @@ access these directly, then inspecting the stfbset source code (see
 linux/tests/stfbset in this source tree) would be a good guide.
 
 Notes:
+
     (*) the flicker filter is only available in RGB (Truecolor) display modes, it
         is always disabled if the framebuffer is set to 8bpp.
 
